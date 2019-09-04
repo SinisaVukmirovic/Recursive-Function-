@@ -1,94 +1,96 @@
-// Definition of Recursion (recursive functions)
-// "A recursive function is a function that calls itself during its execution."
-// This enables the function to repeat itself several times, outputting the result and the end of each iteration.
+// Recursive Functions
 
-/////////////////////////////////////////////////
+// How recursive function work?
+// Invoke the SAME function with a different input, until it reaches base case(stop condition)!
 
-// Count Down Example
-
-// using "normal" function using for loop
-function countDown(n) {
-    for (let i = n; i > 0; i--) {
-        console.log(i);
+// Countdown function
+function countDown(num) {
+    // base case
+    if (num <= 0) {
+        console.log('All done!');
+        return;
     }
-    console.log('Hooraay!');
-}
+    console.log(num);
+    num--;
+    countDown(num);
+};
+
 countDown(5);
+console.log('================================');
 
-// using Recursive Function
-function countDownRecursive(n) {
-    // brakeout statement (guard clause - equivalent of a while condition in a for loop)
-    if (n <= 0) {
-        console.log('Hooraay!');
-        return;
-    }
-    console.log(n);
-    countDownRecursive(n - 1);
-}
-countDownRecursive(5);
+// ==========================================
 
-///////////////////////////////////////////////////
-
-// Sum Range Example
-
-// using "normal" function with a for loop
-function sumRange(n) {
-    let total = 0;
-    for (let i = n; i > 0; i--) {
-        total += i;
-    }
-    return total;
-}
-console.log(sumRange(5));
-
-// using recursive function
-function sumRangeRecursive(n, total = 0) {
-    // brakeout statement (guard clause - equivalent of a while condition in a for loop)
-    if (n <= 0) {
-        return total;
-    }
-    return sumRangeRecursive(n - 1, total + n);
-}
-console.log(sumRangeRecursive(5));
-
-//////////////////////////////////////////////////////
-
-// Example where it is almost imposible to salve without using recursion function
-
-// Print Children 
-
-const familyTree = {
-    name: 'Jonh',
-    children: [
-        {
-            name: 'Jim',
-            children: []
-        },
-        {
-            name: 'Zoe',
-            children: [
-                {
-                    name: 'Kyle',
-                    children: []
-                },
-                {
-                    name: 'Sophia',
-                    children: []
-                }
-            ]
-        }
-    ]
+function sumRange(num) {
+    // base case
+    if (num === 1) return 1;
+    return num + sumRange(num - 1);
 }
 
-// recursive function
-function printChildrenRecursive(tree) {
-    // guard clause
-    if (tree.children.length === 0) {
-        return;
-    }
-    tree.children.forEach(child => {
-        console.log(child.name);
-        printChildrenRecursive(child);
-    });
+console.log('Sum range of 5 is: ', sumRange(5));
+console.log('================================');
+
+function factorial(num) {
+    // base case
+    if (num <= 1) return 1;
+    else return num * factorial(num - 1);
 }
-printChildrenRecursive(familyTree);
+
+console.log('factorial of 5 is: ', factorial(5));
+console.log('================================');
+
+// =============================================
+
+// MPJ's definition of Recursive Function
+// Recursive function is a function that calls itself, until it doesn't!
+
+// COuntdown example using ES 6 syntax
+const countdownFrom= (num) => {
+    if (num === 0) return;
+    console.log(num);
+    countdownFrom(num - 1);
+};
+
+console.log(countdownFrom(5));
+console.log('============================');
+
+// =========================================================================
+// Example from practice
+
+// Our data
+let categories = [
+    { id: 'animals', parent: null },
+    { id: 'mammals', parent: 'animals' },
+    { id: 'cats', parent: 'mammals' },
+    { id: 'dogs', parent: 'mammals' },
+    { id: 'chihuahua', parent: 'dogs' },
+    { id: 'labrador', parent: 'dogs' },
+    { id: 'persian', parent: 'cats' },
+    { id: 'siamese', parent: 'cats' }
+];
+
+// Our goal is to create this tree structure
+// {
+//     animals: {
+//         mammals: {
+//             dogs: {
+//                 chuhuahua: null,
+//                 labrador: null
+//             },
+//             cats: {
+//                 persian: null,
+//                 siamese: null
+//             }
+//         }
+//     }
+// }
+
+const makeTree = (categories, parent) => {
+    let node = {};
+
+    categories.filter(c => c.parent === parent)
+              .forEach(c => 
+                    node[c.id] = makeTree(categories, c.id));
+    return node;
+}
+
+console.log(JSON.stringify(makeTree(categories, null, 2)));
